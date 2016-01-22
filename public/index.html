@@ -13,7 +13,7 @@
 	<script src="p5/p5-release/p5.min.js"></script>
 	<script src="p5/p5-release/addons/p5.dom.min.js"></script>
 
-
+<!-- Data core JavaScript -->
     <script>
 
 
@@ -25,39 +25,49 @@
           var arr = data.split(' ');
           $(serverResponse).html("<span>"+arr[0] + "</span></br>" + arr[1]+"/"+arr[2]);
           
-
-
           function setup() {      
            // label = createSpan(" ");  // the label 
            // label.position(10,20);        // position it
            // 
-           
+
             serverResponse = createSpan();  // create a div for server responses
            // serverResponse.position("absolute"); 
             serverResponse.position(110,463);    // position it
+
+            //serverResponse.getElementById("raw").innerHTML = data;
             getData(1);               // make a request back to the server
 
             }
+
           
           // this function makes a call to the server:
             function getData(perintah) {
               httpGet('/device/' + perintah, update);
             }
             
+            //var data3 = serverResponse;
+            var dataraw = serverResponse;
+            var arr = dataraw.split(" ");
             // update the page when the server responds:
             function update(data) {
               serverResponse.html(data);    // put the response in the span
               getData(1);             // make another call to the server
+              //document.getElementById("temp").innerHTML = update;
+                       
+              document.getElementById("temp").innerHTML = JSON.stringify(serverResponse.html(data));
+              console.log(serverResponse)     
             }
 
-
-            //
             //
             //TESTING
+            //
             
-            document.getElementById("demo").innerHTML = "hAI.";
-            
-          </script>
+            document.getElementById("raw").innerHTML = "update";
+    </script>
+
+
+
+
 </head>
 <body>
 
@@ -104,7 +114,30 @@
             <div class="panel-heading">
               <h3 class="panel-title">RAW Data</h3>
             </div>
-            <div class="panel-body" id="raw">
+            <div class="panel-body" >
+              <p id="raw"> </p>
+            <!-- Raw Data Split
+            <script>
+            
+            var serverResponse;
+            function RAWData(){
+              var dataraw = serverResponse;
+              var arr = dataraw.split(" ");
+              
+            }
+           
+              function update(data) {
+              serverResponse.html(data);    // put the response in the span
+              getData(1);             // make another call to the server
+              return data;
+
+            }
+            document.getElementById("raw").innerHTML = update(data);
+            
+            document.getElementById("raw").innerHTML = arr[0];
+            </script>-->
+            
+
             </div>
           </div>
         </div>
@@ -133,7 +166,16 @@
               <h3 class="panel-title">Humidty</h3>
             </div>
             <div class="panel-body">
-             
+              <p id="humidity"> </p>
+             <!-- Script Humit-->
+              <script> 
+              var data3 = serverResponse;
+              document.getElementById("humidity").innerHTML = data.slice(4,7);
+
+
+
+              </script>
+
             </div>
           </div>
         </div>
@@ -145,6 +187,10 @@
   <div class="page-header">
     <h1> Grafik</h1>
   </div>
+
+
+            
+
 	
 
 	<!-- Bootstrap core JavaScript
