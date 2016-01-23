@@ -10,14 +10,17 @@
   <link rel="stylesheet" href="css/zeroinside.css">
 
 	<!-- SCRIPT -->
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="p5/p5-release/p5.min.js"></script>
 	<script src="p5/p5-release/addons/p5.dom.min.js"></script>
+  <script src="js/Chart.js"></script>
 
 <!-- Data core JavaScript -->
     <script>
 
 
-
+          var socket = io();
+          var x, y, z ;
           var label, serverResponse;  // UI elements
           
           // Split Data
@@ -25,11 +28,12 @@
           var arr = data.split(' ');
           $(serverResponse).html("<span>"+arr[0] + "</span></br>" + arr[1]+"/"+arr[2]);
           
-          function setup() {      
+           function setup() {      
            // label = createSpan(" ");  // the label 
            // label.position(10,20);        // position it
            // 
-
+            x = width/2;
+            y = width/2;
             serverResponse = createSpan();  // create a div for server responses
            // serverResponse.position("absolute"); 
             serverResponse.position(110,463);    // position it
@@ -54,15 +58,40 @@
               getData(1);             // make another call to the server
               //document.getElementById("temp").innerHTML = update;
                        
-              document.getElementById("temp").innerHTML = JSON.stringify(serverResponse.html(data));
+              //document.getElementById("temp").innerHTML = JSON.stringify(serverResponse.html(data));
               console.log(serverResponse)     
             }
+
+              function readData (data) {
+                var results = data.split(' ');  // split the data on the commas
+                x = results[0];                 // x is the first value
+                y = results[1];                 // y is the second value
+                z = results[2];            // z is the third value
+               document.getElementById("temp").innerHTML = results[0];
+
+              }
+
+               function showData(data) {
+               var resultString = data.data;
+               text.html("Sensor reading:" + resultString);
+               // split it:
+               var numbers = split(resultString, " ");
+               // use the numbers:
+               text.position(int(numbers[0]), int(numbers[1]));
+               text.style("font-size", int(numbers[2]) + "%");
+             }
+
 
             //
             //TESTING
             //
             
             document.getElementById("raw").innerHTML = "update";
+
+
+            // Socket
+            // 
+            socket.on('message', readData);
     </script>
 
 
@@ -187,6 +216,39 @@
   <div class="page-header">
     <h1> Grafik</h1>
   </div>
+
+  <div style="width:30%">
+    <div>
+      <canvas id="canvas" height="450" width="600"></canvas>
+    </div>
+  </div>
+
+  <!-- Line Char.js-->
+
+ <script>
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+    var lineChartData = {
+      labels : ["10","20","30","40","50","60","70"],
+      datasets : [
+        {
+          label: "My First dataset",
+          fillColor : "rgba(220,220,220,0.2)",
+          strokeColor : "rgba(220,220,220,1)",
+          pointColor : "rgba(220,220,220,1)",
+          pointStrokeColor : "#fff",
+          pointHighlightFill : "#fff",
+          pointHighlightStroke : "rgba(220,220,220,1)",
+          data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+        }
+      ]
+    }
+  window.onload = function(){
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+      responsive: true
+    });
+  }
+  </script>
 
 
             

@@ -15,7 +15,9 @@ by Tom Igoe
 */
 
 var express = require('express');				// include express.js
-var app = express();								  	// a local instance of it
+var app = express();	
+var io = require('socket.io');
+var socketServer = io(server);							  	// a local instance of it
 
 app.use(express.static('public'));			// use the /public directory for static files
 
