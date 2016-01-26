@@ -1,0 +1,28 @@
+#map {
+	text-align: center;
+	width: 1000px;
+	height: 400px;
+}
+
+#canvas {
+	width : 1000px;
+	height : 400px;
+
+}
+
+.bg-1 { 
+      background-color: #1abc9c; /* Green */
+      color: #ffffff;
+  }
+
+.bg-2 { 
+      background-color: #474e5d; /* Dark Blue */
+      color: #ffffff;
+  }
+
+.container-fluid {
+      padding-top: 100px;
+      padding-bottom: 10px;
+}
+
+
