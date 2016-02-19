@@ -67,7 +67,8 @@ function getSensorReading(request, response) {
 		myPort.on('data', function(data) {
 			// send the data and close the connection:
 			response.end(data);
-		});
+			
+    	});
 	});
 }
 

@@ -19,8 +19,18 @@
     <script>
     var socket = io();
     var x, y, z ;
-    var label, serverResponse;  // UI elements
-    
+    var label, serverResponse, serverResponse2;  // UI elements
+    var droll = [],
+    dpitch = [],
+    dyaw = [],
+    pathS = [];
+    var img = null,
+    needle = null,
+    ctx = null,
+    degrees = 0,
+    l = 0;
+      var dataraw = serverResponse;
+    var arr = dataraw.split(" ");
     // Split Data
     var data = serverResponse;
     var arr = data.split(' ');
@@ -30,11 +40,16 @@
     // label = createSpan(" ");  // the label
     // label.position(10,20);        // position it
     //
-    x = width/2;
-    y = width/2;
+    createCanvas(50, 300);   // set up the canvas
+    x = width;              // set X and Y in the middle of the screen
+    y = 25;
+    document.getElementById("temp").innerHTML = x;
+    document.getElementById("humidity").innerHTML = y;
     serverResponse = createSpan();  // create a div for server responses
+    serverResponse2 = createSpan();
     // serverResponse.position("absolute");
     serverResponse.position(110,463);    // position it
+    serverResponse2.position(100,400);
     //serverResponse.getElementById("raw").innerHTML = data;
     getData(1);               // make a request back to the server
     }
@@ -45,25 +60,93 @@
     }
     
     //var data3 = serverResponse;
-    var dataraw = serverResponse;
-    var arr = dataraw.split(" ");
+  
     // update the page when the server responds:
-    function update(data) {
-    serverResponse.html(data);    // put the response in the span
-    getData(1);             // make another call to the server
-    //document.getElementById("temp").innerHTML = update;
+    // 
     
-    //document.getElementById("temp").innerHTML = JSON.stringify(serverResponse.html(data));
-    console.log(serverResponse)
+    // function parsed(data) {
+        //  var parts = line.split(' ');
+    //var parsed = querystring.stringify(data);
+
+   // document.getElementById("temp").innerHTML = 'tt';
+   // getData(1);
+
+   // }
+   
+
+    function update(data) {
+     // var parts = line.split(' ');
+    //var parsed = querystring.stringify(data);
+ 
+    serverResponse.html(data);    // put the response in the span
+    //serverResponse2.html(parsed);
+    
+    getData(1);             // make another call to the server
+    
+
+    //document.getElementById("temp").innerHTML = update;
+    //document.getElementById("temp").innerHTML = pitch;
+    //console.log(serverResponse)
     }
+
+
     function readData (data) {
+        var results = data.split(',');  // split the data on the spasi
+        x = results[0];                 // x is the first value
+        y = results[1];                 // y is the second value
+         z = results[2];            // button is the third value
+         
+
+         serverResponse2.html(x);
+         document.getElementById("temp").innerHTML = x;
+         getData(1);
+    }
+
+    
+
+
+    /** var socket = io.connect('http://localhost:8080');
+
+    socket.on('serialdata', function (data) {
+    l++;
+    var parsed = d3.csv.parseRows(data);
+    var roll = parseFloat(parsed[0][0]),
+        pitch = parsed[0][1],
+        yaw = parsed[0][2];
+    box.rotation(roll, yaw, pitch).update();
+    document.getElementById("temp").innerHTML = roll;
+    //document.getElementById("temp").innerHTML = pitch;
+
+
+}); **/
+   
+   /* function readData (data) {
     var results = data.split(' ');  // split the data on the commas
     x = results[0];                 // x is the first value
     y = results[1];                 // y is the second value
     z = results[2];            // z is the third value
     document.getElementById("temp").innerHTML = results[0];
     }
+    */
+   
+
+    /** 
     function showData(data) {
+    var droll = [],
+    dpitch = [],
+    dyaw = [],
+    pathS = [];
+    var img = null,
+    needle = null,
+    ctx = null,
+    degrees = 0,
+    l = 0;
+
+    var parsed = d3.csv.parseRows(data);
+    var roll = parseFloat(parsed[0][0]),
+        pitch = parsed[0][1],
+        yaw = parsed[0][2];
+
     var resultString = data.data;
     text.html("Sensor reading:" + resultString);
     // split it:
@@ -72,15 +155,22 @@
     text.position(int(numbers[0]), int(numbers[1]));
     text.style("font-size", int(numbers[2]) + "%");
     }
+
+    **/
+
+
     //
     //TESTING
     //
     
-    document.getElementById("raw").innerHTML = "update";
+   // document.getElementById("raw").innerHTML = "update";
     // Socket
     //
-    socket.on('message', readData);
+    //socket.on('message', readData);
+    
     </script>
+
+
     <!-- Maps -->
     <script>
     var map = new GMaps({
@@ -165,7 +255,7 @@
             <!-- <script> document.getElementById("temp").innerHTML = serverResponse.html(data) + "Hello"; </script> -->
             <!-- Split Array [0] put in the temp id
             -->
-            <script> document.getElementById("temp").innerHTML = arr[0] ;  </script>
+            <!-- <script> document.getElementById("temp").innerHTML = arr[0] ;  </script> -->
           </div>
         </div>
       </div>
@@ -177,10 +267,10 @@
           <div class="panel-body">
             <p id="humidity"> </p>
             <!-- Script Humit-->
-            <script>
+            <!--<script>
             var data3 = serverResponse;
             document.getElementById("humidity").innerHTML = data.slice(4,7);
-            </script>
+            </script> -->
           </div>
         </div>
       </div>
